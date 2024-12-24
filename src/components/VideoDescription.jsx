@@ -3,12 +3,12 @@ import { ThumbsUp, ThumbsDown, Share2, Download } from 'lucide-react'
 
 export default function VideoDescription() {
   return (
-    (<div className="mt-4">
-      <h1 className="text-2xl font-bold">Video Title</h1>
-      <div className="flex items-center justify-between mt-2">
-        <div className="flex items-center space-x-4">
+    (<div className='mt-4'>
+      <h1 className="text-lg text-black font-bold">Video 1</h1>
+      <div className="flex justify-between text-black items-center text-sm md:col-span-4 px-4">
+        <div className="flex items-center">
           <img
-            src="/placeholder.svg?height=40&width=40"
+            src="/globe.svg?height=20&width=20"
             alt="Channel Avatar"
             className="rounded-full" />
           <div>
@@ -17,25 +17,23 @@ export default function VideoDescription() {
           </div>
           <Button>Subscribe</Button>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm">
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
             <ThumbsUp className="mr-2 h-4 w-4" /> 100K
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
             <ThumbsDown className="mr-2 h-4 w-4" /> 1K
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
             <Share2 className="mr-2 h-4 w-4" /> Share
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
             <Download className="mr-2 h-4 w-4" /> Download
           </Button>
         </div>
       </div>
-      <p className="mt-4 text-sm text-gray-700">
-        This is the video description. It can contain multiple lines of text describing the content of the video.
-      </p>
-    </div>)
+
+    </div >)
   );
 }
 
