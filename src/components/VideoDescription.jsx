@@ -19,7 +19,7 @@ export default function VideoDescription() {
 
       <div className="flex items-center justify-between mt-4 pb-2 border-b">
         <div className="flex gap-4">
-          <div className="flex flex-col  items-center">
+          <div className="flex flex-col items-center">
             <Button variant="ghost" size="sm" className="h-auto px-4 py-2">
               <ThumbsUp className="h-6 w-6" />
             </Button>
