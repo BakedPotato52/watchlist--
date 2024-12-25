@@ -1,0 +1,198 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  videos        Video[]
+  likes         Like[]
+  views         View[]
+  subscriptions Subscription[] @relation("Subscriber")
+  subscribers   Subscription[] @relation("Creator")
+  comments      Comment[]
+  playlists     Playlist[]
+  notifications Notification[]
+  reports       Report[]
+}
+
+model Video {
+  id           String     @id @default(cuid())
+  title        String
+  description  String?
+  url          String
+  thumbnailUrl String?
+  duration     Int // in seconds
+  visibility   Visibility @default(PUBLIC)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  // Relationships
+  user          User           @relation(fields: [userId], references: [id])
+  userId        String
+  likes         Like[]
+  views         View[]
+  comments      Comment[]
+  tags          VideoTag[]
+  category      Category       @relation(fields: [categoryId], references: [id])
+  categoryId    String
+  playlistItems PlaylistItem[]
+  reports       Report[]
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  // Relationships
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+  video   Video  @relation(fields: [videoId], references: [id])
+  videoId String
+
+  @@unique([userId, videoId])
+}
+
+model View {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  // Relationships
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+  video   Video  @relation(fields: [videoId], references: [id])
+  videoId String
+
+  @@unique([userId, videoId])
+}
+
+model Subscription {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  // Relationships
+  subscriber   User   @relation("Subscriber", fields: [subscriberId], references: [id])
+  subscriberId String
+  creator      User   @relation("Creator", fields: [creatorId], references: [id])
+  creatorId    String
+
+  @@unique([subscriberId, creatorId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  user            User      @relation(fields: [userId], references: [id])
+  userId          String
+  video           Video     @relation(fields: [videoId], references: [id])
+  videoId         String
+  parentComment   Comment?  @relation("CommentReplies", fields: [parentCommentId], references: [id])
+  parentCommentId String?
+  replies         Comment[] @relation("CommentReplies")
+}
+
+model Playlist {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  visibility  Visibility @default(PRIVATE)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relationships
+  user   User           @relation(fields: [userId], references: [id])
+  userId String
+  items  PlaylistItem[]
+}
+
+model PlaylistItem {
+  id        String   @id @default(cuid())
+  order     Int
+  createdAt DateTime @default(now())
+
+  // Relationships
+  playlist   Playlist @relation(fields: [playlistId], references: [id])
+  playlistId String
+  video      Video    @relation(fields: [videoId], references: [id])
+  videoId    String
+
+  @@unique([playlistId, videoId])
+}
+
+model Category {
+  id     String  @id @default(cuid())
+  name   String  @unique
+  videos Video[]
+}
+
+model Tag {
+  id     String     @id @default(cuid())
+  name   String     @unique
+  videos VideoTag[]
+}
+
+model VideoTag {
+  // Relationships
+  video   Video  @relation(fields: [videoId], references: [id])
+  videoId String
+  tag     Tag    @relation(fields: [tagId], references: [id])
+  tagId   String
+
+  @@id([videoId, tagId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  content   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Relationships
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model Report {
+  id        String       @id @default(cuid())
+  reason    String
+  status    ReportStatus @default(PENDING)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  // Relationships
+  reporter   User   @relation(fields: [reporterId], references: [id])
+  reporterId String
+  video      Video  @relation(fields: [videoId], references: [id])
+  videoId    String
+}
+
+enum Visibility {
+  PUBLIC
+  UNLISTED
+  PRIVATE
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+}
