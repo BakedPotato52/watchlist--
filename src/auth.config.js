@@ -45,5 +45,9 @@ export const authConfig = {
             return session
         },
     },
+    secret: process.env.AUTH_SECRET,
+    session: {
+        strategy: "jwt",
+    },
 }
 
