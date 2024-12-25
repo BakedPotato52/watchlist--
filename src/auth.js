@@ -1,0 +1,4 @@
+import NextAuth from "next-auth"
+import { authConfig } from "@/auth.config.js"
+export const { auth, handlers } = NextAuth(authConfig)
+
