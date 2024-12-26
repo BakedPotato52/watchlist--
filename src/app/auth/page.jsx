@@ -1,7 +1,8 @@
 'use client'
 
 import { signIn } from "@/auth"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
@@ -9,17 +10,57 @@ import { Shield, Github } from 'lucide-react'
 
 export default function AuthPage() {
   const [isSignUp, setIsSignUp] = useState(false)
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
+  const router = useRouter();
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await signIn("credentials", {
-      email,
-      password,
-      callbackUrl: "/",
-    })
+    if (isSignUp) {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, password }),
+      })
+      console.log(response)
+      if (response.ok) {
+        // Handle successful signup
+        await signIn("credentials", { email, password })
+      } else {
+        // Handle signup error
+        console.error('Signup failed')
+      }
+    } else {
+      const response = await fetch('/api/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      })
+      console.log(response)
+      if (response.ok) {
+        // Handle successful signin
+        await signIn("credentials", { email, password })
+      } else {
+        // Handle signin error
+        console.error('Signin failed')
+      }
+    }
   }
+
+  useEffect(() => {
+    if (isSignUp) {
+      localStorage.setItem('auth', 'signup')
+    } else {
+      localStorage.setItem('auth', 'signin')
+    }
+    router.push('/')
+  }, [isSignUp])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -32,6 +73,13 @@ export default function AuthPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
             <Input
               type="email"
               placeholder="Email Address"
