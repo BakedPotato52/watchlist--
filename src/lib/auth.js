@@ -98,10 +98,12 @@ export async function signOut() {
 
 export async function getSession() {
     try {
-        const session = cookies().get('session')?.value
-        if (!session) return { user: null }
-        return JSON.parse(session)
+        const cookieStore = cookies()
+        const sessionCookie = await cookieStore.get('session')
+        if (!sessionCookie) return { user: null }
+        return JSON.parse(sessionCookie.value)
     } catch (error) {
+        console.error('Error parsing session:', error)
         return { user: null }
     }
 }

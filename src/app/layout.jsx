@@ -12,7 +12,7 @@ export const metadata = {
 export default async function RootLayout({
   children
 }) {
-  await getSession();
+  const session = await getSession();
   return (
     (<html lang="en">
       <body className={inter.className}>
