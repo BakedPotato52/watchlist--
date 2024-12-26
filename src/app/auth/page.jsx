@@ -5,7 +5,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Shield, Github, ComputerIcon as Microsoft } from 'lucide-react'
+import { Shield, Github } from 'lucide-react'
 
 export default function AuthPage() {
   const [isSignUp, setIsSignUp] = useState(false)
@@ -80,14 +80,7 @@ export default function AuthPage() {
               <Github className="h-5 w-5 mr-2" />
               GitHub
             </Button>
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => signIn("azure-ad", { callbackUrl: "/" })}
-            >
-              <Microsoft className="h-5 w-5 mr-2" />
-              Microsoft
-            </Button>
+
           </div>
 
           <div className="text-center text-sm">
