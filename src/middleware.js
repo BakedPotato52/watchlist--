@@ -1,17 +1,35 @@
 import { NextResponse } from 'next/server'
-import { getToken } from 'next-auth/jwt'
 
-export async function middleware(request) {
-    const token = await getToken({ req: request, secret: process.env.AUTH_SECRET })
+export function middleware(request) {
+    const session = request.cookies.get('session')?.value
+    const isAuthPage = request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup'
+    const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard')
 
-    if (!token && !request.nextUrl.pathname.startsWith('/auth')) {
-        return NextResponse.redirect(new URL('/auth', request.url))
+    // If trying to access protected route without session, redirect to login
+    if (isProtectedRoute && !session) {
+        const loginUrl = new URL('/login', request.url)
+        loginUrl.searchParams.set('from', request.nextUrl.pathname)
+        return NextResponse.redirect(loginUrl)
     }
 
+    // If trying to access auth pages with session, redirect to app
+    if (isAuthPage && session) {
+        return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+
+    // Allow all other routes
     return NextResponse.next()
 }
 
 export const config = {
-    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+    matcher: [
+        /*
+         * Match all request paths except for the ones starting with:
+         * - api (API routes)
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         */
+        '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    ],
 }
-

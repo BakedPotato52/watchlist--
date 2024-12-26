@@ -1,8 +1,7 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import Header from '../components/Header'
-import { UserProvider } from './context/userContext'
-
+import { getSession } from '@/lib/auth'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
@@ -10,18 +9,17 @@ export const metadata = {
   description: 'A simple YouTube clone built with Next.js',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }) {
+  await getSession();
   return (
     (<html lang="en">
       <body className={inter.className}>
-        <UserProvider>
-          <Header />
-          <main className="container mx-auto ">
-            {children}
-          </main>
-        </UserProvider>
+        <Header />
+        <main className="container mx-auto ">
+          {children}
+        </main>
 
       </body>
     </html>)
