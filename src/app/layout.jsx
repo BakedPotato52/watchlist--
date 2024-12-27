@@ -16,7 +16,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header session={session} />
+        <Header />
         <main className="container mx-auto">
           {children}
         </main>
