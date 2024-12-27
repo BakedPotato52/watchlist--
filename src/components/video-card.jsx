@@ -1,10 +1,10 @@
 import Image from "next/image"
 import Link from "next/link"
-import { formatViews, formatTimeAgo } from "@/lib/utils"
+import { formatViews, formatTimeAgo } from "@/lib/util"
 
 export function VideoCard({ video, layout = "grid" }) {
     return (
-        <Link href={`/watch/${video.id}`}>
+        <Link href={`/video/${video.id}`}>
             <div className={`group ${layout === "grid" ? "w-full" : "flex gap-4"}`}>
                 <div className={`relative ${layout === "grid" ? "aspect-video w-full" : "aspect-video w-[180px]"}`}>
                     <Image
