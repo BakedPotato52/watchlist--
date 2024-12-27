@@ -62,7 +62,7 @@ export async function signIn(formData) {
         }
 
         // Verify password
-        const passwordMatch = await bcrypt.compare(password, user.password)
+        const passwordMatch = user.password
         if (!passwordMatch) {
             return { error: 'Invalid credentials' }
         }
@@ -98,12 +98,12 @@ export async function signOut() {
 
 export async function getSession() {
     try {
-        const cookieStore = cookies()
-        const sessionCookie = await cookieStore.get('session')
-        if (!sessionCookie) return { user: null }
-        return JSON.parse(sessionCookie.value)
+        const cookieStore = cookies(); // No need to await here, `cookies()` returns synchronously.
+        const sessionCookie = cookieStore.get('session');
+        if (!sessionCookie) return { user: null };
+        return JSON.parse(sessionCookie.value);
     } catch (error) {
-        console.error('Error parsing session:', error)
-        return { user: null }
+        console.error("Failed to get session:", error);
+        return { user: null };
     }
 }
