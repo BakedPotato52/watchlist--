@@ -2,13 +2,29 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 
-const comments = [
-  { id: '1', user: 'User 1', avatar: '/placeholder.svg?height=32&width=32', content: 'Great video! Thanks for sharing.', timestamp: '2 hours ago' },
-  { id: '2', user: 'User 2', avatar: '/placeholder.svg?height=32&width=32', content: 'I learned a lot from this. Keep up the good work!', timestamp: '1 day ago' },
-  // Add more comments as needed
-]
 
-export default function Comments() {
+export default function Comments({ videoId }) {
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    // Fetch comments using the videoId
+    // This is a placeholder and should be replaced with actual API call
+    const fetchComments = async () => {
+      // const response = await fetch(`/api/comments/${videoId}`);
+      // const data = await response.json();
+      // setComments(data);
+
+      // Placeholder data
+      setComments([
+        { id: '1', user: 'User 1', avatar: '/placeholder.svg?height=32&width=32', content: 'Great video! Thanks for sharing.', timestamp: '2 hours ago' },
+        { id: '2', user: 'User 2', avatar: '/placeholder.svg?height=32&width=32', content: 'I learned a lot from this. Keep up the good work!', timestamp: '1 day ago' },
+        // Add more comments as needed
+      ]);
+    };
+
+    fetchComments();
+  }, [videoId]);
+
   return (
     (<div className="mt-8">
       <h2 className="text-xl font-semibold mb-4">Comments</h2>

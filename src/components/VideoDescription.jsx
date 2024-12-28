@@ -5,16 +5,40 @@ import { Button } from "@/components/ui/button"
 import { ThumbsUp, ThumbsDown, Share2, Bookmark } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-export default function VideoDescription() {
+export default function VideoDescription({ videoId }) {
   const [isExpanded, setIsExpanded] = useState(false)
+  const [videoDetails, setVideoDetails] = useState(null)
+
+  useEffect(() => {
+    // Fetch video details using the videoId
+    // This is a placeholder and should be replaced with actual API call
+    const fetchVideoDetails = async () => {
+      // const response = await fetch(`/api/video/${videoId}`);
+      // const data = await response.json();
+      // setVideoDetails(data);
+
+      // Placeholder data
+      setVideoDetails({
+        title: 'Sample Video Title',
+        description: 'This is a sample video description. Replace this with actual data from your API.',
+        views: 1000000,
+        likes: 50000,
+        uploadDate: '2023-01-01'
+      });
+    };
+
+    fetchVideoDetails();
+  }, [videoId]);
+
+  if (!videoDetails) return <div>Loading...</div>;
 
   return (
     <div className="mt-2 px-2">
       <h1 className="text-base font-medium leading-tight">
-        Coding | By Kanak Acharya
+        {videoDetails.title}
       </h1>
       <div className="mt-2 text-sm text-muted-foreground">
-        629M views • 3 days ago
+        {videoDetails.views} views • {videoDetails.uploadDate}
       </div>
 
       <div className="flex items-center justify-between mt-4 pb-2 border-b">
@@ -23,7 +47,7 @@ export default function VideoDescription() {
             <Button variant="ghost" size="sm" className="h-auto px-4 py-2">
               <ThumbsUp className="h-6 w-6" />
             </Button>
-            <span className="text-xs">29K</span>
+            <span className="text-xs">{videoDetails.likes.toLocaleString()} likes</span>
           </div>
           <div className="flex flex-col items-center">
             <Button variant="ghost" size="sm" className="h-auto px-4 py-2">
@@ -69,7 +93,7 @@ export default function VideoDescription() {
 
       <div className="mt-2 relative">
         <p className={`text-sm ${!isExpanded && 'line-clamp-2'}`}>
-          Come on, make some noise! This stand-up comedy special brings you the hilarious take on coding life, debugging adventures, and everything that makes a developer's world unique. Watch as we explore the funny side of programming!
+          {videoDetails.description}
         </p>
         {!isExpanded && (
           <Button

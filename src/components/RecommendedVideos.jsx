@@ -1,19 +1,35 @@
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
-const recommendedVideos = [
-  { id: '1', title: 'Recommended Video 1', thumbnail: '/placeholder.svg?height=120&width=200', channel: 'Channel 1', views: '100K views', timestamp: '1 day ago' },
-  { id: '2', title: 'Recommended Video 2', thumbnail: '/placeholder.svg?height=120&width=200', channel: 'Channel 2', views: '200K views', timestamp: '2 days ago' },
-  { id: '3', title: 'Recommended Video 3', thumbnail: '/placeholder.svg?height=120&width=200', channel: 'Channel 3', views: '300K views', timestamp: '3 days ago' },
-  // Add more recommended videos as needed
-]
+export default function RecommendedVideos({ currentVideoId }) {
+  const [recommendedVideos, setRecommendedVideos] = useState([]);
 
-export default function RecommendedVideos() {
+  useEffect(() => {
+    // Fetch recommended videos
+    // This is a placeholder and should be replaced with actual API call
+    const fetchRecommendedVideos = async () => {
+      // const response = await fetch(`/api/recommended?currentVideo=${currentVideoId}`);
+      // const data = await response.json();
+      // setRecommendedVideos(data);
+
+      // Placeholder data
+      setRecommendedVideos([
+        { id: '1', title: 'Recommended Video 1', thumbnail: '/placeholder.svg?height=120&width=200', channel: 'Channel 1', views: '100K views', timestamp: '1 day ago' },
+        { id: '2', title: 'Recommended Video 2', thumbnail: '/placeholder.svg?height=120&width=200', channel: 'Channel 2', views: '200K views', timestamp: '2 days ago' },
+        { id: '3', title: 'Recommended Video 3', thumbnail: '/placeholder.svg?height=120&width=200', channel: 'Channel 3', views: '300K views', timestamp: '3 days ago' },
+        // Add more recommended videos as needed
+      ]);
+    };
+
+    fetchRecommendedVideos();
+  }, [currentVideoId]);
+
   return (
     (<div>
       <h2 className="text-xl font-semibold mb-4">Recommended Videos</h2>
       <div className="space-y-4">
         {recommendedVideos.map((video) => (
-          <Link href={`/watch?v=${video.id}`} key={video.id} className="flex space-x-2">
+          <Link href={`/video/${video.id}`} key={video.id} className="flex space-x-2">
             <img
               src={video.thumbnail}
               alt={video.title}
