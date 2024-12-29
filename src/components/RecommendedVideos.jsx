@@ -14,12 +14,7 @@ export default function RecommendedVideos({ currentVideoId }) {
       // setRecommendedVideos(data);
 
       // Placeholder data
-      setRecommendedVideos([
-        { id: '1', title: 'Recommended Video 1', thumbnail: '/placeholder.svg?height=120&width=200', channel: 'Channel 1', views: '100K views', timestamp: '1 day ago' },
-        { id: '2', title: 'Recommended Video 2', thumbnail: '/placeholder.svg?height=120&width=200', channel: 'Channel 2', views: '200K views', timestamp: '2 days ago' },
-        { id: '3', title: 'Recommended Video 3', thumbnail: '/placeholder.svg?height=120&width=200', channel: 'Channel 3', views: '300K views', timestamp: '3 days ago' },
-        // Add more recommended videos as needed
-      ]);
+      setRecommendedVideos(currentVideoId);
     };
 
     fetchRecommendedVideos();

@@ -7,21 +7,26 @@ import { Textarea } from "@/components/ui/textarea"
 
 export default function Comments({ videoId }) {
   const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch comments using the videoId
-    // This is a placeholder and should be replaced with actual API call
     const fetchComments = async () => {
-      // const response = await fetch(`/api/comments/${videoId}`);
-      // const data = await response.json();
-      // setComments(data);
+      setLoading(true);
+      setError(null);
+      try {
+        // In a real application, you would fetch comments from an API
+        // For now, we'll simulate an API call with a timeout
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Placeholder data
-      setComments([
-        { id: '1', user: 'User 1', avatar: '/placeholder.svg?height=32&width=32', content: 'Great video! Thanks for sharing.', timestamp: '2 hours ago' },
-        { id: '2', user: 'User 2', avatar: '/placeholder.svg?height=32&width=32', content: 'I learned a lot from this. Keep up the good work!', timestamp: '1 day ago' },
-        // Add more comments as needed
-      ]);
+        // Simulated comments dat
+
+        setComments(videoId);
+      } catch (err) {
+        setError('Failed to load comments. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchComments();
@@ -42,20 +47,26 @@ export default function Comments({ videoId }) {
           </div>
         </div>
       </div>
-      <div className="space-y-4">
-        {comments.map((comment) => (
-          <div key={comment.id} className="flex space-x-4">
-            <Avatar>
-              <AvatarImage src={comment.avatar} alt={comment.user} />
-              <AvatarFallback>{comment.user.slice(0, 2).toUpperCase()}</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="font-semibold">{comment.user} <span className="font-normal text-sm text-gray-500">{comment.timestamp}</span></p>
-              <p>{comment.content}</p>
+      {comments.length === 0 ? (
+        <p>No comments yet. Be the first to comment!</p>
+      ) : (
+        <div className="space-y-4">
+          {comments.map((comment) => (
+            <div key={comment.id} className="flex space-x-4">
+              <Avatar>
+                <AvatarImage src={comment.avatar} alt={comment.user} />
+                <AvatarFallback>{comment.user.slice(0, 2).toUpperCase()}</AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="font-semibold">
+                  {comment.user} <span className="font-normal text-sm text-gray-500">{comment.timestamp}</span>
+                </p>
+                <p>{comment.content}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>)
   );
 }

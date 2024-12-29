@@ -5,30 +5,18 @@ import { Button } from "@/components/ui/button"
 import { ThumbsUp, ThumbsDown, Share2, Bookmark } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-export default function VideoDescription({ videoId }) {
+export default function VideoDescription({ video }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [videoDetails, setVideoDetails] = useState(null)
 
   useEffect(() => {
-    // Fetch video details using the videoId
-    // This is a placeholder and should be replaced with actual API call
-    const fetchVideoDetails = async () => {
-      // const response = await fetch(`/api/video/${videoId}`);
-      // const data = await response.json();
-      // setVideoDetails(data);
 
-      // Placeholder data
-      setVideoDetails({
-        title: 'Sample Video Title',
-        description: 'This is a sample video description. Replace this with actual data from your API.',
-        views: 1000000,
-        likes: 50000,
-        uploadDate: '2023-01-01'
-      });
+    const fetchVideoDetails = async () => {
+      setVideoDetails(video)
     };
 
     fetchVideoDetails();
-  }, [videoId]);
+  }, [video]);
 
   if (!videoDetails) return <div>Loading...</div>;
 
@@ -47,7 +35,7 @@ export default function VideoDescription({ videoId }) {
             <Button variant="ghost" size="sm" className="h-auto px-4 py-2">
               <ThumbsUp className="h-6 w-6" />
             </Button>
-            <span className="text-xs">{videoDetails.likes.toLocaleString()} likes</span>
+            <span className="text-xs">{videoDetails.likes || 0} likes</span>
           </div>
           <div className="flex flex-col items-center">
             <Button variant="ghost" size="sm" className="h-auto px-4 py-2">
