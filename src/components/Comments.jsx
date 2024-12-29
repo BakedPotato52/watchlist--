@@ -7,46 +7,71 @@ import { Textarea } from "@/components/ui/textarea"
 
 export default function Comments({ videoId }) {
   const [comments, setComments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [newComment, setNewComment] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchComments = async () => {
-      setLoading(true);
-      setError(null);
       try {
-        // In a real application, you would fetch comments from an API
-        // For now, we'll simulate an API call with a timeout
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // Simulated comments dat
-
-        setComments(videoId);
-      } catch (err) {
-        setError('Failed to load comments. Please try again later.');
-      } finally {
-        setLoading(false);
+        const response = await fetch(`/api/comments?videoId=${videoId}`);
+        if (!response.ok) throw new Error('Failed to fetch comments');
+        const fetchedComments = await response.json();
+        setComments(fetchedComments);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
       }
     };
 
     fetchComments();
   }, [videoId]);
 
+  const handleCommentSubmit = async (event) => {
+    event.preventDefault();
+    if (!newComment.trim()) return;
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/comments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ videoId, content: newComment }),
+      });
+
+      if (!response.ok) throw new Error('Failed to submit comment');
+
+      const addedComment = await response.json();
+      setComments(prevComments => [addedComment, ...prevComments]);
+      setNewComment('');
+    } catch (error) {
+      console.error('Error submitting comment:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    (<div className="mt-8">
+    <div className="mt-8">
       <h2 className="text-xl font-semibold mb-4">Comments</h2>
-      <div className="flex space-x-4 mb-4">
+      <form onSubmit={handleCommentSubmit} className="flex space-x-4 mb-4">
         <Avatar>
           <AvatarImage src="/placeholder.svg?height=40&width=40" alt="@username" />
           <AvatarFallback>UN</AvatarFallback>
         </Avatar>
         <div className="flex-1">
-          <Textarea placeholder="Add a comment..." />
+          <Textarea
+            placeholder="Add a comment..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
           <div className="mt-2 flex justify-end">
-            <Button>Comment</Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Submitting...' : 'Comment'}
+            </Button>
           </div>
         </div>
-      </div>
+      </form>
       {comments.length === 0 ? (
         <p>No comments yet. Be the first to comment!</p>
       ) : (
@@ -54,12 +79,12 @@ export default function Comments({ videoId }) {
           {comments.map((comment) => (
             <div key={comment.id} className="flex space-x-4">
               <Avatar>
-                <AvatarImage src={comment.avatar} alt={comment.user} />
-                <AvatarFallback>{comment.user.slice(0, 2).toUpperCase()}</AvatarFallback>
+                <AvatarImage src={comment.user.image || '/placeholder.svg?height=40&width=40'} alt={comment.user.name} />
+                <AvatarFallback>{comment.user.name.slice(0, 2).toUpperCase()}</AvatarFallback>
               </Avatar>
               <div>
                 <p className="font-semibold">
-                  {comment.user} <span className="font-normal text-sm text-gray-500">{comment.timestamp}</span>
+                  {comment.user.name} <span className="font-normal text-sm text-gray-500">{new Date(comment.createdAt).toLocaleString()}</span>
                 </p>
                 <p>{comment.content}</p>
               </div>
@@ -67,7 +92,7 @@ export default function Comments({ videoId }) {
           ))}
         </div>
       )}
-    </div>)
+    </div>
   );
 }
 

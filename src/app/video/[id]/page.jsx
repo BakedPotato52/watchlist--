@@ -6,7 +6,7 @@ import Comments from '../../../components/Comments'
 import { getVideoData } from '@/lib/getVideoData'
 
 export default async function VideoPage({ params }) {
-  const videoId = params.id;
+  const videoId = await params.id;
 
   try {
     const videoData = await getVideoData(videoId);
