@@ -17,7 +17,7 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <Header />
-        <main className="container mx-auto">
+        <main className="max-w-100 mx-auto dark:text-white">
           {children}
         </main>
       </body>

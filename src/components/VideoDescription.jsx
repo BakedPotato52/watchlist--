@@ -17,7 +17,7 @@ export default function VideoDescription({ video }) {
 
     fetchVideoDetails();
   }, [video]);
-
+  console.log(videoDetails)
   if (!videoDetails) return <div>Loading...</div>;
 
   return (

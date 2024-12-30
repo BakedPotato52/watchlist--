@@ -4,7 +4,9 @@ export async function getVideoData(videoId) {
     try {
         const video = await prisma.video.findUnique({
             where: { id: videoId },
-            select: { id: true, url: true, title: true, description: true }
+            select: {
+                id: true, url: true, title: true, description: true, likes: true, views: true, updatedAt: true
+            }
         })
 
         if (!video) {

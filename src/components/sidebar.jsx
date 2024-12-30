@@ -6,8 +6,8 @@ import { Home, Compass, Library, History, PlaySquare, Clock, ThumbsUp, Film, Gam
 export function Sidebar({ className, isCollapsed = false }) {
     return (
         <div className={cn("pb-12", className)}>
-            <div className="space-y-4 py-4">
-                <div className="px-3 py-2">
+            <div className="space-y-4 py-4 border-left border-gray-200">
+                <div className="px-3 py-2 divide-y divide-gray-200">
                     <div className="space-y-1">
                         <Button variant="ghost" className="w-full justify-start">
                             <Home className="mr-2 h-4 w-4" />

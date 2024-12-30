@@ -2,8 +2,6 @@ import { Suspense } from "react"
 import { prisma } from "@/lib/prisma"
 import { VideoCard } from "@/components/video-card"
 import { Sidebar } from "@/components/sidebar"
-import { Button } from "@/components/ui/button"
-import { Menu } from 'lucide-react'
 
 async function getVideos() {
     return await prisma.video.findMany({
@@ -24,14 +22,7 @@ export default async function DashboardPage() {
             </div>
 
             <div className="flex-1">
-                <div className="sticky top-0 z-10 bg-background border-b">
-                    <div className="flex items-center h-16 px-4">
-                        <Button variant="ghost" size="icon" className="md:hidden">
-                            <Menu className="h-6 w-6" />
-                        </Button>
-                        <div className="flex-1" />
-                    </div>
-                </div>
+
 
                 <main className="container mx-auto py-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
