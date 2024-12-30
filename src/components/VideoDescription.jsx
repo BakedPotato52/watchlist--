@@ -9,15 +9,22 @@ export default function VideoDescription({ video }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [videoDetails, setVideoDetails] = useState(null)
 
-  useEffect(() => {
+  const formattedDate = new Date(video.createdAt).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
 
+  useEffect(() => {
     const fetchVideoDetails = async () => {
       setVideoDetails(video)
     };
 
     fetchVideoDetails();
   }, [video]);
+
   console.log(videoDetails)
+
   if (!videoDetails) return <div>Loading...</div>;
 
   return (
@@ -26,7 +33,7 @@ export default function VideoDescription({ video }) {
         {videoDetails.title}
       </h1>
       <div className="mt-2 text-sm text-muted-foreground">
-        {videoDetails.views} views • {videoDetails.uploadDate}
+        {videoDetails.views.length.toLocaleString()} views • {formattedDate}
       </div>
 
       <div className="flex items-center justify-between mt-4 pb-2 border-b">
@@ -35,7 +42,7 @@ export default function VideoDescription({ video }) {
             <Button variant="ghost" size="sm" className="h-auto px-4 py-2">
               <ThumbsUp className="h-6 w-6" />
             </Button>
-            <span className="text-xs">{videoDetails.likes || 0} likes</span>
+            <span className="text-xs">{videoDetails.likes.length.toLocaleString() || 0} likes</span>
           </div>
           <div className="flex flex-col items-center">
             <Button variant="ghost" size="sm" className="h-auto px-4 py-2">
@@ -63,11 +70,11 @@ export default function VideoDescription({ video }) {
       <div className="flex items-start justify-between py-2 mt-2">
         <div className="flex gap-3">
           <Avatar className="h-10 w-10">
-            <AvatarImage src="/placeholder.svg?height=40&width=40" alt="Channel Avatar" />
-            <AvatarFallback>KA</AvatarFallback>
+            <AvatarImage src={videoDetails.user.avatarUrl || "/placeholder.svg?height=40&width=40"} alt={`${videoDetails.user.username}'s avatar`} />
+            <AvatarFallback>{videoDetails.user.username.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
           <div>
-            <p className="font-medium">kanak</p>
+            <p className="font-medium">{videoDetails.user.username}</p>
             <p className="text-sm text-muted-foreground">524M subscribers</p>
           </div>
         </div>

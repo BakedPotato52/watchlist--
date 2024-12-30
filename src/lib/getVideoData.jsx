@@ -3,9 +3,23 @@ import { prisma } from "./prisma"
 export async function getVideoData(videoId) {
     try {
         const video = await prisma.video.findUnique({
-            where: { id: videoId },
+            where: {
+                id: videoId
+            },
             select: {
-                id: true, url: true, title: true, description: true, likes: true, views: true, updatedAt: true
+                id: true,
+                url: true,
+                title: true,
+                description: true,
+                likes: true,
+                views: true,
+                updatedAt: true,
+                user: {
+                    select: {
+                        username: true,
+                        avatarUrl: true
+                    }
+                }
             }
         })
 

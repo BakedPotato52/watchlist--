@@ -8,7 +8,10 @@ import { getRecommendedVideos } from '@/app/api/recommended-videos'
 import { getComments } from '@/app/api/comments'
 
 export default async function VideoPage({ params }) {
-  const videoId = await params.id;
+  if (!params?.id) {
+    notFound()
+  }
+  const videoId = params.id;
 
   try {
     const videoData = await getVideoData(videoId);
