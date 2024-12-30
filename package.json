@@ -9,8 +9,9 @@
     "start": "next start",
     "lint": "next lint",
     "seed": "npx prisma db seed",
-    "prisma-generate": "npx prisma generate",
-    "studio": "npx prisma studio"
+    "generate": "npx prisma generate",
+    "studio": "npx prisma studio",
+    "migrate": "npx prisma migrate dev"
   },
   "prisma": {
     "seed": "node prisma/seed.js"

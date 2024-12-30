@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
-export default function RecommendedVideos({ currentVideoId }) {
-  const [recommendedVideos, setRecommendedVideos] = useState([]);
+export default function RecommendedVideos({ initialVideos, currentVideoId }) {
+  const [recommendedVideos, setRecommendedVideos] = useState(initialVideos);
 
 
   useEffect(() => {

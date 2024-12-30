@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 
 
-export default function Comments({ videoId }) {
-  const [comments, setComments] = useState([]);
+export default function Comments({ initialComments, videoId }) {
+  const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -79,8 +79,8 @@ export default function Comments({ videoId }) {
           {comments.map((comment) => (
             <div key={comment.id} className="flex space-x-4">
               <Avatar>
-                <AvatarImage src={comment.user.image || '/placeholder.svg?height=40&width=40'} alt={comment.user.name} />
-                <AvatarFallback>{comment.user.name.slice(0, 2).toUpperCase()}</AvatarFallback>
+                <AvatarImage src={comment.user.avatarUrl || '/placeholder.svg?height=40&width=40'} alt={comment.user.name} />
+                <AvatarFallback>{comment.user.username.slice(0, 2).toUpperCase()}</AvatarFallback>
               </Avatar>
               <div>
                 <p className="font-semibold">

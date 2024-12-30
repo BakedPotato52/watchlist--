@@ -43,6 +43,7 @@ async function main() {
                 username: 'johndoe',
                 email: 'john@example.com',
                 password: 'hashed_password_1', // In real app, ensure passwords are properly hashed
+                avatarUrl: 'https://res.cloudinary.com/kanak-acharya/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1726469669/user_files/ctaqdhcn5pmf3tdluxdf.jpg',
             },
         }),
         prisma.user.create({
@@ -50,6 +51,7 @@ async function main() {
                 username: 'janesmith',
                 email: 'jane@example.com',
                 password: 'hashed_password_2',
+                avatarUrl: 'https://res.cloudinary.com/kanak-acharya/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1726469669/user_files/ctaqdhcn5pmf3tdluxdf.jpg',
             },
         }),
         prisma.user.create({
@@ -57,6 +59,7 @@ async function main() {
                 username: 'bobwilson',
                 email: 'bob@example.com',
                 password: 'hashed_password_3',
+                avatarUrl: 'https://res.cloudinary.com/kanak-acharya/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1726469669/user_files/ctaqdhcn5pmf3tdluxdf.jpg',
             },
         }),
     ]);
@@ -75,8 +78,8 @@ async function main() {
             data: {
                 title: 'Getting Started with Next.js',
                 description: 'Learn the basics of Next.js framework',
-                url: 'https://example.com/video1.mp4',
-                thumbnailUrl: 'https://example.com/thumbnail1.jpg',
+                url: 'https://youtu.be/sijpPYDWBg4?si=ebE4aYKwzurZQbp-',
+                thumbnailUrl: 'https://res.cloudinary.com/kanak-acharya/image/upload/c_thumb,w_200,g_face/v1735368322/highquality-youtube-thumbnail-backgrounds-content-creators_1046319-87993_dpfk6r.avif',
                 duration: 600, // 10 minutes
                 visibility: 'PUBLIC',
                 userId: users[0].id,
@@ -93,8 +96,8 @@ async function main() {
             data: {
                 title: 'React Hooks Tutorial',
                 description: 'Understanding React Hooks in depth',
-                url: 'https://example.com/video2.mp4',
-                thumbnailUrl: 'https://example.com/thumbnail2.jpg',
+                url: 'https://youtu.be/3R63m4sTpKo?si=v3KsXti9cD-b5w-q',
+                thumbnailUrl: 'https://res.cloudinary.com/kanak-acharya/image/upload/c_thumb,w_200,g_face/v1735368286/high-resolution-youtube-thumbnail-backgrounds-for-designers_4dr_okwqf8.jpg',
                 duration: 900, // 15 minutes
                 visibility: 'PUBLIC',
                 userId: users[1].id,

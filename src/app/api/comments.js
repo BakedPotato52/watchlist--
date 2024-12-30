@@ -11,8 +11,7 @@ export async function getComments(videoId) {
         include: {
             user: {
                 select: {
-                    name: true,
-                    image: true
+                    username: true,
                 }
             }
         }
