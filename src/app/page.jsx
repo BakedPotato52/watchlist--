@@ -15,25 +15,17 @@ export default async function DashboardPage() {
     const videos = await getVideos()
 
     return (
-        <div className="flex">
-            {/* Sidebar - hidden on mobile, collapsible on tablet, full on desktop */}
-            <div className="hidden md:block w-[70px] xl:w-[240px] flex-shrink-0">
-                <Sidebar isCollapsed={false} className="sticky top-0" />
-            </div>
-
-            <div className="flex-1">
-
-
-                <main className="container mx-auto py-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                        <Suspense fallback={<VideoCardSkeleton count={12} />}>
-                            {videos.map((video) => (
-                                <VideoCard key={video.id} video={video} />
-                            ))}
-                        </Suspense>
-                    </div>
-                </main>
-            </div>
+        <div className="flex h-screen bg-background">
+            <Sidebar className="w-64 flex-shrink-0" />
+            <main className="flex-grow p-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <Suspense fallback={<VideoCardSkeleton count={12} />}>
+                        {videos.map((video) => (
+                            <VideoCard key={video.id} video={video} />
+                        ))}
+                    </Suspense>
+                </div>
+            </main>
         </div>
     )
 }

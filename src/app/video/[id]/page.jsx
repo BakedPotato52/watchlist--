@@ -6,6 +6,7 @@ import Comments from '../../../components/Comments'
 import { getVideoData } from '@/lib/getVideoData'
 import { getRecommendedVideos } from '@/app/api/recommended-videos'
 import { getComments } from '@/app/api/comments'
+import { Sidebar } from '@/components/sidebar'
 
 export default async function VideoPage({ params }) {
   if (!params?.id) {
@@ -20,13 +21,16 @@ export default async function VideoPage({ params }) {
 
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-2 px-4">
+        <div className="md:col-span-2 ">
           <VideoPlayer videoUrl={videoData.url} />
           <VideoDescription video={videoData} />
-          <Comments initialComments={initialComments} videoId={videoId} />
+          <div className='md:col-span-1 px-4'>
+            <Comments initialComments={initialComments} videoId={videoId} />
+          </div>
         </div>
-        <div>
-          <RecommendedVideos initialVideos={initialRecommendedVideos} currentVideoId={videoId} />
+        <RecommendedVideos initialVideos={initialRecommendedVideos} currentVideoId={videoId} />
+        <div className='sm:hidden'>
+          <Sidebar />
         </div>
       </div>
     );
