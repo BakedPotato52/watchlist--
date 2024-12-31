@@ -11,7 +11,7 @@ async function getVideos() {
     })
 }
 
-export default async function DashboardPage() {
+export default async function HomePage() {
     const videos = await getVideos()
 
     return (

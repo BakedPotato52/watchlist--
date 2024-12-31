@@ -37,6 +37,7 @@ export default function RecommendedVideos({ initialVideos, currentVideoId }) {
                   alt={video.title}
                   layout="fill"
                   objectFit="cover"
+                  className="rounded-lg"
                 />
               </div>
               <div>
