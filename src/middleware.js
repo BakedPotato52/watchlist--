@@ -1,22 +1,19 @@
-import { NextResponse } from 'next/server'
+import { withAuth } from "next-auth/middleware"
+import { NextResponse } from "next/server"
+import { getToken } from "next-auth/jwt"
 
-export async function middleware(request) {
-    const session = await request.cookies.get('session')?.value
-    const isAuthPage = request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup'
-    const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard')
-
-    if (isProtectedRoute && !session) {
-        const loginUrl = new URL('/login', request.url)
-        loginUrl.searchParams.set('from', request.nextUrl.pathname)
-        return NextResponse.redirect(loginUrl)
+export default withAuth(
+    function middleware(req) {
+        if (req.nextUrl.pathname.startsWith("/auth/signin") && req.nextauth.token) {
+            return NextResponse.redirect(new URL("/", req.url))
+        }
+    },
+    {
+        callbacks: {
+            authorized: ({ token }) => !!token
+        },
     }
-
-    if (isAuthPage && session) {
-        return NextResponse.redirect(new URL('/dashboard', request.url))
-    }
-
-    return NextResponse.next()
-}
+)
 
 export const config = {
     matcher: [

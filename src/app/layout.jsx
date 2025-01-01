@@ -1,7 +1,6 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
 import Header from '../components/Header';
-import { getSession } from '@/lib/auth';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -11,7 +10,6 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  await getSession();
 
   return (
     <html lang="en">
