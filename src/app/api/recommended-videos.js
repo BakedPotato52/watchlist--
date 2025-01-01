@@ -5,7 +5,31 @@ export async function getRecommendedVideos(currentVideoId) {
         where: {
             id: {
                 not: currentVideoId
-            }
+            },
+            visibility: 'PUBLIC' // Only fetch public videos
+        },
+        select: {
+            id: true,
+            url: true,
+            title: true,
+            description: true,
+            thumbnailUrl: true, // Corrected field name
+            duration: true,
+            createdAt: true,
+            updatedAt: true,
+            views: {
+                select: {
+                    id: true
+                }
+            },
+            user: {
+                select: {
+                    id: true,
+                    username: true,
+                    avatarUrl: true
+                }
+            },
+
         },
         orderBy: {
             createdAt: 'desc'
