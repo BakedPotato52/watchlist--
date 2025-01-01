@@ -4,16 +4,11 @@ import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { ThumbsUp, ThumbsDown, Share2, Bookmark } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { formatTimeAgo } from '@/lib/util'
 
 export default function VideoDescription({ video }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [videoDetails, setVideoDetails] = useState(null)
-
-  const formattedDate = new Date(video.createdAt).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
 
   useEffect(() => {
     const fetchVideoDetails = async () => {
@@ -33,7 +28,7 @@ export default function VideoDescription({ video }) {
         {videoDetails.title}
       </h1>
       <div className="mt-2 text-sm text-muted-foreground">
-        {videoDetails.views.length.toLocaleString()} views • {formattedDate}
+        {videoDetails.views.length.toLocaleString()} views • {formatTimeAgo(videoDetails.updatedAt)}
       </div>
 
       <div className="flex items-center justify-between mt-4 pb-2 border-b">

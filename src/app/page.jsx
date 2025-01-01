@@ -7,13 +7,15 @@ async function getVideos() {
     return await prisma.video.findMany({
         orderBy: {
             createdAt: 'desc'
+        },
+        include: {
+            views: true
         }
     })
 }
 
 export default async function HomePage() {
     const videos = await getVideos()
-
     return (
         <div className="flex h-screen bg-background">
             <Sidebar className="w-64 flex-shrink-0" />

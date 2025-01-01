@@ -2,10 +2,11 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { formatTimeAgo } from '@/lib/util'
 
 export default function RecommendedVideos({ initialVideos, currentVideoId }) {
   const [recommendedVideos, setRecommendedVideos] = useState(initialVideos);
-
+  console.log(recommendedVideos)
 
   useEffect(() => {
     const fetchRecommendedVideos = async () => {
@@ -14,6 +15,7 @@ export default function RecommendedVideos({ initialVideos, currentVideoId }) {
         if (!response.ok) throw new Error('Failed to fetch recommended videos');
         const videos = await response.json();
         setRecommendedVideos(videos);
+        console.log('videos', videos)
       } catch (error) {
         console.error('Error fetching recommended videos:', error);
       }
@@ -42,8 +44,8 @@ export default function RecommendedVideos({ initialVideos, currentVideoId }) {
               </div>
               <div>
                 <h3 className="font-semibold line-clamp-2">{video.title}</h3>
-                <p className="text-sm text-gray-500">{video.user}</p>
-                <p className="text-sm text-gray-500">{video.views} • {video.updatedAt.toLocaleString()}</p>
+                <p className="text-sm text-gray-500">{video.username}</p>
+                <p className="text-sm text-gray-500">{video.views} • {formatTimeAgo(video.updatedAt)}</p>
               </div>
             </Link>
           ))}

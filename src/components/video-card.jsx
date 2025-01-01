@@ -1,8 +1,11 @@
+'use client'
 import Image from "next/image"
 import Link from "next/link"
-import { formatViews, formatTimeAgo } from "@/lib/util"
+import { formatTimeAgo } from "@/lib/util"
 
 export function VideoCard({ video, layout = "grid" }) {
+    const videoDetails = video;
+    const videoDuration = videoDetails.duration / 60;
     return (
         <Link href={`/video/${video.id}`}>
             <div className={`group ${layout === "grid" ? "w-full" : "flex gap-4"}`}>
@@ -14,7 +17,7 @@ export function VideoCard({ video, layout = "grid" }) {
                         className="object-cover rounded-lg"
                     />
                     <div className="absolute bottom-1 right-1 bg-black/80 px-1 rounded text-xs text-white">
-                        {video.duration}
+                        {videoDuration} Mins
                     </div>
                 </div>
                 <div className={`mt-2 ${layout === "list" ? "flex-1" : ""}`}>
@@ -32,7 +35,7 @@ export function VideoCard({ video, layout = "grid" }) {
                             <h3 className="font-semibold text-sm line-clamp-2">{video.title}</h3>
                             <p className="text-sm text-muted-foreground">{video.channelName}</p>
                             <p className="text-sm text-muted-foreground">
-                                {formatViews(video.views)} • {formatTimeAgo(video.createdAt)}
+                                {videoDetails.views ? videoDetails.views.length.toLocaleString() : '0'} Views • {formatTimeAgo(video.createdAt)}
                             </p>
                         </div>
                     </div>

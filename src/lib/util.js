@@ -1,11 +1,4 @@
-export function formatViews(views) {
-    if (views >= 1000000) {
-        return `${(views / 1000000).toFixed(1)}M views`;
-    } else if (views >= 1000) {
-        return `${(views / 1000).toFixed(1)}K views`;
-    }
-    return `${views} views`;
-}
+
 
 export function formatTimeAgo(date) {
     const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
