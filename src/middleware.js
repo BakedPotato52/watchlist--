@@ -1,10 +1,9 @@
 import { withAuth } from "next-auth/middleware"
 import { NextResponse } from "next/server"
-import { getToken } from "next-auth/jwt"
 
 export default withAuth(
     function middleware(req) {
-        if (req.nextUrl.pathname.startsWith("/auth/signin") && req.nextauth.token) {
+        if (req.nextUrl.pathname.startsWith("/signIn") && req.nextauth.token) {
             return NextResponse.redirect(new URL("/", req.url))
         }
     },
