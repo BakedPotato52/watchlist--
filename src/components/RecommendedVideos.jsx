@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { formatTimeAgo } from '@/lib/util';
 
 export default function RecommendedVideos({ initialVideos, currentVideoId }) {
   const [recommendedVideos, setRecommendedVideos] = useState(initialVideos);
@@ -22,7 +21,6 @@ export default function RecommendedVideos({ initialVideos, currentVideoId }) {
 
     fetchRecommendedVideos();
   }, [currentVideoId]);
-  console.log(recommendedVideos);
 
   return (
     <div>
