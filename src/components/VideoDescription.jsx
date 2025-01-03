@@ -10,14 +10,45 @@ import { formatTimeAgo } from '@/lib/util'
 export default function VideoDescription({ video }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [videoDetails, setVideoDetails] = useState(null)
+  const [likes, setLikes] = useState(0)
+  const [isSubscribed, setIsSubscribed] = useState(false)
 
   useEffect(() => {
     const fetchVideoDetails = async () => {
       setVideoDetails(video)
+      setLikes(video.likes.length)
     }
 
     fetchVideoDetails()
   }, [video])
+
+  const [hasLiked, setHasLiked] = useState(false)
+
+  const handleLike = () => {
+    if (!hasLiked) {
+      setLikes(likes + 1)
+      setHasLiked(true)
+      // Add your API call to update likes on the server
+    }
+  }
+
+  const handleShare = () => {
+    // Implement share functionality, e.g., using the Web Share API
+    if (navigator.share) {
+      navigator.share({
+        title: videoDetails.title,
+        text: 'Check out this video!',
+        url: window.location.href,
+      })
+    } else {
+      alert('Share not supported on this browser')
+    }
+  }
+
+  const handleSubscribe = () => {
+    setIsSubscribed(!isSubscribed)
+    // Add your API call to update subscription status on the server
+  }
 
   if (!videoDetails) return <div>Loading...</div>
 
@@ -31,7 +62,7 @@ export default function VideoDescription({ video }) {
       <div className="flex items-center justify-between mt-4 pb-2 border-b">
         <div className="flex gap-4">
           {[
-            { icon: ThumbsUp, label: `${videoDetails.likes.length.toLocaleString() || 0} likes` },
+            { icon: ThumbsUp, label: `${likes.toLocaleString()} likes`, onClick: handleLike },
             { icon: ThumbsDown, label: 'Dislike' },
           ].map((item, index) => (
             <motion.div
@@ -39,6 +70,7 @@ export default function VideoDescription({ video }) {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               className="flex flex-col items-center"
+              onClick={item.onClick}
             >
               <Button variant="ghost" size="sm" className="h-auto px-4 py-2">
                 <item.icon className="h-6 w-6" />
@@ -49,7 +81,7 @@ export default function VideoDescription({ video }) {
         </div>
         <div className="flex gap-4">
           {[
-            { icon: Share2, label: 'Share' },
+            { icon: Share2, label: 'Share', onClick: handleShare },
             { icon: Bookmark, label: 'Save' },
           ].map((item, index) => (
             <motion.div
@@ -57,6 +89,7 @@ export default function VideoDescription({ video }) {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               className="flex flex-col items-center"
+              onClick={item.onClick}
             >
               <Button variant="ghost" size="sm" className="h-auto px-4 py-2">
                 <item.icon className="h-6 w-6" />
@@ -88,8 +121,9 @@ export default function VideoDescription({ video }) {
           <Button
             variant="default"
             className="bg-white text-black hover:bg-white/90 dark:bg-white dark:text-black dark:hover:bg-white/90"
+            onClick={handleSubscribe}
           >
-            Subscribe
+            {isSubscribed ? 'Subscribed' : 'Subscribe'}
           </Button>
         </motion.div>
       </div>
