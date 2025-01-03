@@ -7,13 +7,14 @@ import bcrypt from "bcryptjs"
 
 const prisma = new PrismaClient();
 
-if (!process.env.NEXTAUTH_SECRET) {
-    throw new Error("NEXTAUTH_SECRET must be set")
-}
+// Remove this check as Next.js will throw its own error if the env var is missing
+// if (!process.env.NEXTAUTH_SECRET) {
+//     throw new Error("NEXTAUTH_SECRET must be set")
+// }
 
-if (!process.env.GITHUB_ID || !process.env.GITHUB_SECRET) {
-    throw new Error("GitHub OAuth credentials must be set")
-}
+// if (!process.env.GITHUB_ID || !process.env.GITHUB_SECRET) {
+//     throw new Error("GitHub OAuth credentials must be set")
+// }
 
 const providers = [
     GithubProvider({
@@ -59,7 +60,7 @@ export const providerMap = providers.map((provider) => ({
     name: provider.name
 }));
 
-export const { handlers, signIn, signOut } = NextAuth({
+export const authOptions = {
     adapter: PrismaAdapter(prisma),
     providers,
     secret: process.env.NEXTAUTH_SECRET,
@@ -67,8 +68,34 @@ export const { handlers, signIn, signOut } = NextAuth({
         strategy: "jwt",
         maxAge: 30 * 24 * 60 * 60, // 30 days
     },
-    jwt: {
-        secret: process.env.JWT_SECRET,
+    cookies: {
+        sessionToken: {
+            name: `__Secure-next-auth.session-token`,
+            options: {
+                httpOnly: true,
+                sameSite: 'lax',
+                path: '/',
+                secure: true,
+                maxAge: 30 * 24 * 60 * 60 // 30 days
+            }
+        },
+        callbackUrl: {
+            name: `__Secure-next-auth.callback-url`,
+            options: {
+                sameSite: 'lax',
+                path: '/',
+                secure: true
+            }
+        },
+        csrfToken: {
+            name: `__Host-next-auth.csrf-token`,
+            options: {
+                httpOnly: true,
+                sameSite: 'lax',
+                path: '/',
+                secure: true
+            }
+        }
     },
     callbacks: {
         async jwt({ token, user }) {
@@ -89,7 +116,13 @@ export const { handlers, signIn, signOut } = NextAuth({
     pages: {
         signIn: '/signin',
         error: '/error',
+        signOut: '/signout',
     },
-    debug: process.env.NODE_ENV !== "production",
-})
+}
+
+const nextAuthHandlers = NextAuth(authOptions)
+
+export const { handlers, signIn, signOut } = nextAuthHandlers
+
+export { nextAuthHandlers as default }
 

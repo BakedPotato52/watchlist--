@@ -15,6 +15,7 @@ async function getVideos() {
 }
 
 export default async function HomePage() {
+
     const videos = await getVideos()
     return (
         <div className="flex h-screen bg-background">

@@ -1,3 +1,4 @@
-import { handlers } from "./providers";
-export const { GET, POST } = handlers;
+import { handlers } from "./providers"
+
+export const { GET, POST } = handlers
 
