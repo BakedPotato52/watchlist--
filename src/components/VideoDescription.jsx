@@ -6,12 +6,15 @@ import { Button } from "@/components/ui/button"
 import { ThumbsUp, ThumbsDown, Share2, Bookmark } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { formatTimeAgo } from '@/lib/util'
+import { fetchVideoDetails, updateLikes, updateSubscription } from '@/app/api/video-details'
+
 
 export default function VideoDescription({ video }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [videoDetails, setVideoDetails] = useState(null)
   const [likes, setLikes] = useState(0)
   const [isSubscribed, setIsSubscribed] = useState(false)
+  const [hasLiked, setHasLiked] = useState(false)
 
   useEffect(() => {
     const fetchVideoDetails = async () => {
@@ -21,33 +24,45 @@ export default function VideoDescription({ video }) {
 
     fetchVideoDetails()
   }, [video])
+  console.log(videoDetails);
 
-  const [hasLiked, setHasLiked] = useState(false)
+  const handleLike = async () => {
+    if (!videoDetails) return
 
-  const handleLike = () => {
-    if (!hasLiked) {
-      setLikes(likes + 1)
-      setHasLiked(true)
-      // Add your API call to update likes on the server
+    try {
+      const action = hasLiked ? 'unlike' : 'like'
+      const { likes: updatedLikes } = await updateLikes(video, action)
+      setLikes(updatedLikes)
+      setHasLiked(!hasLiked)
+    } catch (error) {
+      console.error('Failed to update likes:', error)
     }
   }
 
   const handleShare = () => {
-    // Implement share functionality, e.g., using the Web Share API
+    if (!videoDetails) return
+
     if (navigator.share) {
       navigator.share({
         title: videoDetails.title,
         text: 'Check out this video!',
         url: window.location.href,
-      })
+      }).catch((error) => console.error('Error sharing:', error))
     } else {
       alert('Share not supported on this browser')
     }
   }
 
-  const handleSubscribe = () => {
-    setIsSubscribed(!isSubscribed)
-    // Add your API call to update subscription status on the server
+  const handleSubscribe = async () => {
+    if (!videoDetails) return
+
+    try {
+      const action = isSubscribed ? 'unsubscribe' : 'subscribe'
+      const { isSubscribed: updatedSubscription } = await updateSubscription(videoDetails.user.id, action)
+      setIsSubscribed(updatedSubscription)
+    } catch (error) {
+      console.error('Failed to update subscription:', error)
+    }
   }
 
   if (!videoDetails) return <div>Loading...</div>
@@ -111,7 +126,7 @@ export default function VideoDescription({ video }) {
           </Avatar>
           <div>
             <p className="font-medium">{videoDetails.user.username}</p>
-            <p className="text-sm text-muted-foreground">524M subscribers</p>
+            <p className="text-sm text-muted-foreground">{videoDetails.user.subscribers.length.toLocaleString()} subscribers</p>
           </div>
         </div>
         <motion.div
@@ -151,3 +166,4 @@ export default function VideoDescription({ video }) {
     </div>
   )
 }
+
