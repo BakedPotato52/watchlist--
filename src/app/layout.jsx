@@ -1,7 +1,7 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
 import Header from '../components/Header';
-import { Providers } from './context/authProvider';
+import { AuthProviders } from './context/authProvider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
@@ -12,7 +12,7 @@ export const metadata = {
 export default async function RootLayout({ children }) {
 
   return (
-    <Providers>
+    <AuthProviders>
       <html lang="en">
         <body className={inter.className}>
           <Header />
@@ -21,7 +21,7 @@ export default async function RootLayout({ children }) {
           </main>
         </body>
       </html>
-    </Providers>
+    </AuthProviders>
 
   );
 }

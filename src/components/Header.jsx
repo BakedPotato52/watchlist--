@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Search, Menu, User, ArrowLeft, Mic } from 'lucide-react'
 import Link from 'next/link'
 
-export default function Header(session) {
+export default function Header() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isSearching, setIsSearching] = useState(false)
 
