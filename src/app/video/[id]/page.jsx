@@ -18,6 +18,7 @@ export default async function VideoPage({ params }) {
     const videoData = await getVideoData(videoId);
     const initialRecommendedVideos = await getRecommendedVideos(videoId);
     const initialComments = await getComments(videoId);
+    console.log(videoData);
 
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

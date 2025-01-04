@@ -1,22 +1,30 @@
 'use server'
 
-import { signIn } from "next-auth/react"
 import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcryptjs"
 
 const prisma = new PrismaClient()
 
-export async function handleSignIn(providerId, credentials) {
+export async function handleSignIn(username, password) {
     try {
-        if (providerId === "credentials" && credentials) {
-            return await signIn(providerId, {
-                redirect: false,
-                username: credentials.username,
-                password: credentials.password
-            })
-        } else {
-            return await signIn(providerId, { redirect: false })
+        const finduser = await prisma.user.findFirst({
+            where: {
+                username: username,
+            },
+        })
+        if (!finduser) {
+            return { error: 'User not found' }
         }
+        const passwordMatch = await bcrypt.compare(password, finduser.password)
+        if (!passwordMatch) {
+            return { error: 'Invalid password' }
+        }
+        return {
+            success: true, user: {
+                id: finduser.id, username: finduser.username, email: finduser.email
+            }
+        }
+
     } catch (error) {
         console.error('Sign in error:', error)
         return { error: 'An unexpected error occurred' }
