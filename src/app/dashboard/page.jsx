@@ -1,8 +1,6 @@
-import { getSession, signOut } from '@/lib/auth'
 import { Button } from '@/components/ui/button'
 
 export default async function DashboardPage() {
-    const { user } = await getSession()
 
     return (
         <div className="min-h-screen p-8">
