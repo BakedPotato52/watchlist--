@@ -1,6 +1,8 @@
 import { prisma } from "./prisma"
 
 export async function getUserData(userId) {
+    console.log(prisma)
+
     try {
         const user = await prisma.User.findUnique({
             where: {

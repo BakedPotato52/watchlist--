@@ -24,6 +24,7 @@ export default function Header() {
   const [recentSearches, setRecentSearches] = useState([])
   const searchInputRef = useRef(null)
   const router = useRouter()
+
   const { user, setUser } = ConstState()
 
   useEffect(() => {
