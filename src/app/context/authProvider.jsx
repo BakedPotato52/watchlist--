@@ -1,4 +1,5 @@
 'use client'
+import { getUserData } from "@/lib/getUserData";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const Context = createContext();

@@ -2,11 +2,9 @@
 
 import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcryptjs"
-import { ConstState } from "../context/authProvider"
 
 const prisma = new PrismaClient()
 
-const { setUser } = ConstState();
 
 export async function handleSignIn(username, password) {
     try {

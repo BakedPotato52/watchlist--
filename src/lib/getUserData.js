@@ -2,7 +2,7 @@ import { prisma } from "./prisma"
 
 export async function getUserData(userId) {
     try {
-        const user = await prisma.user.findUnique({
+        const user = await prisma.User.findUnique({
             where: {
                 id: userId
             },
