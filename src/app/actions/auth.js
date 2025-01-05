@@ -2,8 +2,11 @@
 
 import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcryptjs"
+import { ConstState } from "../context/authProvider"
 
 const prisma = new PrismaClient()
+
+const { setUser } = ConstState();
 
 export async function handleSignIn(username, password) {
     try {
@@ -16,9 +19,11 @@ export async function handleSignIn(username, password) {
             return { error: 'User not found' }
         }
         const passwordMatch = await bcrypt.compare(password, finduser.password)
+
         if (!passwordMatch) {
             return { error: 'Invalid password' }
         }
+
         return {
             success: true, user: {
                 id: finduser.id, username: finduser.username, email: finduser.email

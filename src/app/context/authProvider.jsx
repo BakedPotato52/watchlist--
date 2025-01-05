@@ -1,25 +1,37 @@
 'use client'
+import { createContext, useContext, useEffect, useState } from "react";
 
-import { createContext, useContext, useReducer, } from 'react';
-import { authReducer, initialState, } from '@/app/reducers/authReducer';
-import { handleSignIn, handleSignUp, } from '@/app/actions/auth';
+const Context = createContext();
 
-export const AuthContext = createContext();
-export const useAuth = () => useContext(AuthContext);
+function AuthProviders({ children }) {
+    // State to track the Users Data
+    const [user, setUser] = useState();
+    console.log("user is", user);
+    let userId = "cm5gc8eif000077tgvtldn85o";
 
-export const AuthProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(authReducer, initialState);
+    useEffect(() => {
+        async function loadUserData() {
+            const userData = await getUserData(userId)
+            setUser(userData)
+        }
+        loadUserData()
+    }, []);
 
     return (
-        <AuthContext.Provider
+        <Context.Provider
             value={{
-                state,
-                dispatch,
-                handleSignIn: handleSignIn(dispatch),
-                handleSignUp: handleSignUp(dispatch)
+                user,
+                setUser
             }}
         >
             {children}
-        </AuthContext.Provider>
+        </Context.Provider>
     );
+}
+
+
+
+export const ConstState = () => {
+    return useContext(Context);
 };
+export default AuthProviders;
