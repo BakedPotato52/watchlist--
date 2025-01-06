@@ -1,3 +1,4 @@
+'use server'
 import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 
@@ -29,7 +30,8 @@ export async function decrypt(token) {
 }
 
 export async function getSession() {
-    const session = cookies().get('session')?.value
+    const sessionCookies = await cookies()
+    const session = sessionCookies.get('session')?.value
     if (!session) return null
     return await decrypt(session)
 }

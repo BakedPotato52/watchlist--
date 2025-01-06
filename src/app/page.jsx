@@ -2,6 +2,7 @@ import { Suspense } from "react"
 import { prisma } from "@/lib/prisma"
 import { VideoCard } from "@/components/video-card"
 import { Sidebar } from "@/components/sidebar"
+import { getSession } from "@/lib/session"
 
 async function getVideos() {
     return await prisma.video.findMany({
@@ -15,8 +16,23 @@ async function getVideos() {
 }
 
 export default async function HomePage() {
+    const session = await getSession()
+    if (!session) {
+        return {
+            status: 401,
+            headers: {
+                'Location': '/signin'
+            }
+        }
+    }
 
     const videos = await getVideos()
+    return <HomePageClient session={session} videos={videos} />
+}
+
+function HomePageClient({ session, videos }) {
+    console.log("session is", session);
+
     return (
         <div className="flex h-screen bg-background">
             <Sidebar className="w-64 flex-shrink-0" />

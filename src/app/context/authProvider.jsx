@@ -7,13 +7,14 @@ const Context = createContext();
 function AuthProviders({ children }) {
     // State to track the Users Data
     const [user, setUser] = useState();
-    console.log("user is", user);
 
     let userId = "cm5gc8eif000077tgvtldn85o";
 
     useEffect(() => {
         async function loadUserData() {
             const userData = await getUserData(userId)
+            console.log("userData is", userData);
+            localStorage.setItem('user', JSON.stringify(userData))
             setUser(userData)
         }
         loadUserData()

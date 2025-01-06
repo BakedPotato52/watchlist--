@@ -1,10 +1,11 @@
 import { prisma } from "./prisma"
+import { NextResponse } from 'next/server'
 
 export async function getUserData(userId) {
     console.log(prisma)
 
     try {
-        const user = await prisma.User.findUnique({
+        const user = await prisma.user.findUnique({
             where: {
                 id: userId
             },
@@ -32,7 +33,7 @@ export async function getUserData(userId) {
             throw new Error('User not found')
         }
 
-        return user
+        return NextResponse.json(user)
     } catch (error) {
         console.error('Failed to fetch user data:', error)
         throw error
