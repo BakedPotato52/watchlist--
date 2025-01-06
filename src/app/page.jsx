@@ -1,4 +1,5 @@
 import { Suspense } from "react"
+import { redirect } from 'next/navigation'
 import { prisma } from "@/lib/prisma"
 import { VideoCard } from "@/components/video-card"
 import { Sidebar } from "@/components/sidebar"
@@ -18,12 +19,7 @@ async function getVideos() {
 export default async function HomePage() {
     const session = await getSession()
     if (!session) {
-        return {
-            status: 401,
-            headers: {
-                'Location': '/signin'
-            }
-        }
+        redirect('/signin')
     }
 
     const videos = await getVideos()

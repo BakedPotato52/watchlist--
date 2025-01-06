@@ -1,6 +1,5 @@
 'use server'
 
-import { setSession } from "@/lib/session"
 import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcryptjs"
 
@@ -60,11 +59,7 @@ export async function handleSignUp(username, email, password) {
             },
         })
 
-        await setSession({ userId: newUser.id, username: newUser, email: newUser.email })
-
-        return new Response(JSON.stringify({ success: true }), {
-            headers: { 'Content-Type': 'application/json' },
-        })
+        return { success: true, user: { id: newUser.id, username: newUser.username, email: newUser.email } }
     } catch (error) {
         console.error('Sign up error:', error)
         return { error: 'An unexpected error occurred during sign up' }

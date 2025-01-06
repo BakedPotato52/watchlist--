@@ -1,44 +1,48 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { handleSignIn } from "@/app/actions/auth"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react"; // Use next-auth's signIn function
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function SignInPage() {
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState(null)
-    const router = useRouter()
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const router = useRouter();
 
     const onSubmit = async (e) => {
-        e.preventDefault()
-        setIsLoading(true)
-        setError(null)
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
 
-        const formData = new FormData(e.currentTarget)
-        const username = formData.get('username')
-        const password = formData.get('password')
+        const formData = new FormData(e.currentTarget);
+        const username = formData.get("username");
+        const password = formData.get("password");
 
         try {
-            const result = await handleSignIn(username, password)
+            const result = await signIn("credentials", {
+                redirect: false, // Prevent automatic redirection
+                username,
+                password,
+            });
 
-            if ('error' in result) {
-                setError(result.error)
+            if (result.error) {
+                setError(result.error);
             } else {
-                router.push('/') // Redirect to dashboard after successful signin
+                router.push("/"); // Redirect to the dashboard after successful sign-in
             }
-        } catch (error) {
-            console.error('Sign in error:', error)
-            setError('An unexpected error occurred')
+        } catch (err) {
+            console.error("Sign in error:", err);
+            setError("An unexpected error occurred. Please try again.");
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
-    }
+    };
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-100 to-indigo-200">
@@ -49,9 +53,9 @@ export default function SignInPage() {
             >
                 <Card className="w-full max-w-md overflow-hidden">
                     <motion.div
-                        initial={{ x: '-100%' }}
+                        initial={{ x: "-100%" }}
                         animate={{ x: 0 }}
-                        transition={{ type: 'spring', stiffness: 100 }}
+                        transition={{ type: "spring", stiffness: 100 }}
                         className="h-2 bg-gradient-to-r from-purple-500 to-indigo-500"
                     />
                     <CardHeader className="space-y-1">
@@ -103,12 +107,8 @@ export default function SignInPage() {
                                     required
                                 />
                             </div>
-                            <Button
-                                className="w-full"
-                                type="submit"
-                                disabled={isLoading}
-                            >
-                                {isLoading ? 'Signing in...' : 'Sign in'}
+                            <Button className="w-full" type="submit" disabled={isLoading}>
+                                {isLoading ? "Signing in..." : "Sign in"}
                             </Button>
                         </motion.form>
                         <div className="mt-4 text-center">
@@ -120,7 +120,10 @@ export default function SignInPage() {
                             </p>
                         </div>
                         <div className="mt-4 text-center">
-                            <Link href="/forgot-password" className="text-sm text-muted-foreground underline underline-offset-4 hover:text-primary">
+                            <Link
+                                href="/forgot-password"
+                                className="text-sm text-muted-foreground underline underline-offset-4 hover:text-primary"
+                            >
                                 Forgot your password?
                             </Link>
                         </div>
@@ -128,5 +131,5 @@ export default function SignInPage() {
                 </Card>
             </motion.div>
         </div>
-    )
+    );
 }

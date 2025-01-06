@@ -5,7 +5,7 @@ export async function getUserData(userId) {
     console.log(prisma)
 
     try {
-        const user = await prisma.user.findUnique({
+        const users = await prisma.user.findMany({
             where: {
                 id: userId
             },
@@ -29,11 +29,11 @@ export async function getUserData(userId) {
             }
         })
 
-        if (!user) {
+        if (!users) {
             throw new Error('User not found')
         }
 
-        return NextResponse.json(user)
+        return NextResponse.json(users)
     } catch (error) {
         console.error('Failed to fetch user data:', error)
         throw error
